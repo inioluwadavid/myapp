@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:recipeapp/dummy_data.dart';
+
 import 'package:recipeapp/widgets/meal_item.dart';
 
 import '../modals/meal.dart';
 
 class CategoryMealScreen extends StatefulWidget {
+   final List<Meal> availableMeals;
+   CategoryMealScreen(this.availableMeals);
   @override
   State<CategoryMealScreen> createState() => _CategoryMealScreenState();
 }
 
 class _CategoryMealScreenState extends State<CategoryMealScreen> {
   // final String id;
+
+
    String? categoryTitle;
   late List<Meal> displayedMeal;
 
@@ -29,7 +33,7 @@ class _CategoryMealScreenState extends State<CategoryMealScreen> {
       final routeArg = ModalRoute.of(context)?.settings.arguments as Map<String, String>;
       categoryTitle = routeArg['title'];
       final categoryId = routeArg['id'];
-      displayedMeal = DUMMY_MEALS.where((meal) {
+      displayedMeal = widget.availableMeals.where((meal) {
         return meal.categories.contains(categoryId);
       }).toList();
       _loaded = true;
@@ -54,7 +58,7 @@ class _CategoryMealScreenState extends State<CategoryMealScreen> {
       body: ListView.builder(itemBuilder: (ctx, index) {
           return MealItem(title: displayedMeal[index].title, imageUrl: displayedMeal[index].imageUrl, duration: displayedMeal[index].duration,
             affordability: displayedMeal[index].affordability, complexity: displayedMeal[index].complexity,
-            id: displayedMeal[index].id,  removeItem: _removeMeal,);
+            id: displayedMeal[index].id,  );
       }, itemCount: displayedMeal.length ,)
     );
   }
